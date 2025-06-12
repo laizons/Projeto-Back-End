@@ -1,3 +1,4 @@
+const PORT = process.env.PORT || 5000;
 const express = require('express');
 const cors = require('cors');
 const usuarioRoutes = require('./routes/usuarioRoutes');
@@ -28,7 +29,7 @@ app.get('/', async (req, res) => {
   res.send(resposta);
 });
 
-app.listen(5000, () => {
-  console.log('Servidor rodando na porta 5000');
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
 
