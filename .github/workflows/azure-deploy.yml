@@ -1,14 +1,18 @@
-name: Build and Deploy to Azure Web App
+name: CI/CD Azure Web App – SosAlerta
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: meu-app-node       # ← substitua pelo nome exato do seu Web App
-  AZURE_WEBAPP_PACKAGE_PATH: '.'        # ← ou o caminho da pasta do seu app, se não for a raiz
-  NODE_VERSION: '20.x'                  # ← confirme a versão utilizada
+  # Nome exato do seu Web App no Azure
+  AZURE_WEBAPP_NAME: sosalerta
+  # Caminho até o seu projeto Node.js dentro do repositório
+  AZURE_WEBAPP_PACKAGE_PATH: '.'
+  # Versão do Node configurada no App Service
+  NODE_VERSION: '20.x'
 
 permissions:
   contents: read
@@ -17,21 +21,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout do código
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: npm
 
-      - name: Install, build and test
-        run: |
-          npm install
-          npm run build --if-present
-          npm run test  --if-present
+      - name: Instalar dependências
+        run: npm install
 
-      - name: Upload artifact
+      - name: Build (se houver)
+        run: npm run build --if-present
+
+      - name: Testes (se houver)
+        run: npm run test --if-present
+
+      - name: Publicar artefato
         uses: actions/upload-artifact@v4
         with:
           name: node-app
@@ -43,19 +51,19 @@ jobs:
     permissions:
       contents: none
     environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      name: Production
+      url: https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net
 
     steps:
-      - name: Download artifact
+      - name: Baixar artefato de build
         uses: actions/download-artifact@v4
         with:
           name: node-app
 
-      - name: Deploy to Azure WebApp
-        id: deploy-to-webapp
+      - name: Deploy no Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          # Secret que você criou no GitHub contendo o XML do seu Publish Profile
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
