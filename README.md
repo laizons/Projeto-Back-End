@@ -1,16 +1,16 @@
 Visão Geral
 Este projeto é uma aplicação de back-end desenvolvida com Express.js, projetada para oferecer serviços robustos e escaláveis. A integração com o Supabase permite um gerenciamento eficiente de dados, enquanto os dados locais são armazenados em arquivos JSON para acesso rápido e fácil.
+
 Estrutura do Projeto
 API (Express.js)
-
-server.js: O coração da aplicação, responsável por iniciar o servidor e configurar as rotas.
-auth.js: Middleware dedicado à autenticação, garantindo que apenas usuários autorizados acessem as rotas protegidas.
+-server.js:O coração da aplicação, responsável por iniciar o servidor e configurar as rotas.
+-auth.js: Middleware dedicado à autenticação, garantindo que apenas usuários autorizados acessem as rotas protegidas.
 
 Controllers
 
-usuarioController.js: Administra todas as operações relacionadas aos usuários, desde o registro até a exclusão.
-climaController.js: Processa e fornece dados climáticos, essenciais para várias funcionalidades do projeto.
-alertaController.js: Gerencia alertas, permitindo notificações eficientes e em tempo real.
+-usuarioController.js: Administra todas as operações relacionadas aos usuários, desde o registro até a exclusão.
+-climaController.js: Processa e fornece dados climáticos, essenciais para várias funcionalidades do projeto.
+-alertaController.js: Gerencia alertas, permitindo notificações eficientes e em tempo real.
 
 Serviços
 
@@ -61,6 +61,16 @@ Visão Geral do Sistema
 
 <img width="3250" height="3840" alt="diag" src="https://github.com/user-attachments/assets/e609c3aa-0558-44cd-8e7a-334c0e025893" />
 
+Este diagrama ilustra a interação básica entre o usuário, a API back-end desenvolvida em Node.js com Express, e o Supabase para autenticação e gestão de dados.
+
+<img width="3516" height="3840" alt="diag Container" src="https://github.com/user-attachments/assets/18fc9d00-b26e-4b81-be5c-bcd8ab1cc188" />
+
+Este diagrama detalha como o usuário interage com a API Express. Mostra a entrada principal no server.js, o uso de middleware para autenticação, e como os controladores processam as requisições, interagindo tanto com armazenamento local quanto com serviços externos.
+
+Fluxo de Dados
+<img width="3840" height="3804" alt="diag componentes" src="https://github.com/user-attachments/assets/e8bdbfea-6930-484b-bdd4-b5ac4e2772c4" />
+
+Este diagrama apresenta o fluxo de dados através da API Web, desde o usuário até o armazenamento externo no Supabase e local nos arquivos JSON. Destaca a importância da camada de autenticação e dos controladores na gestão de dados e serviços.
 
 Licenciamento e Suporte
 Licença
