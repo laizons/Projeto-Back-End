@@ -1,78 +1,90 @@
-Visão Geral
-Este projeto é uma aplicação de back-end desenvolvida com Express.js, projetada para oferecer serviços robustos e escaláveis. A integração com o Supabase permite um gerenciamento eficiente de dados, enquanto os dados locais são armazenados em arquivos JSON para acesso rápido e fácil.
+## Visão Geral
 
-Estrutura do Projeto
-API (Express.js)
--server.js:O coração da aplicação, responsável por iniciar o servidor e configurar as rotas.
--auth.js: Middleware dedicado à autenticação, garantindo que apenas usuários autorizados acessem as rotas protegidas.
+Este projeto é uma aplicação de back-end desenvolvida com **Express.js**, projetada para oferecer serviços robustos e escaláveis. A integração com o **Supabase** permite um gerenciamento eficiente de dados, enquanto os dados locais são armazenados em arquivos JSON para acesso rápido e fácil.
 
-Controllers
+---
 
--usuarioController.js: Administra todas as operações relacionadas aos usuários, desde o registro até a exclusão.
--climaController.js: Processa e fornece dados climáticos, essenciais para várias funcionalidades do projeto.
--alertaController.js: Gerencia alertas, permitindo notificações eficientes e em tempo real.
+## Estrutura do Projeto
 
-Serviços
+### API (Express.js)
 
-supabaseClient.js: Serve como a ponte entre a aplicação e o Supabase, facilitando operações de banco de dados com segurança e rapidez.
+- **server.js:** O coração da aplicação, responsável por iniciar o servidor e configurar as rotas.
+- **auth.js:** Middleware dedicado à autenticação, garantindo que apenas usuários autorizados acessem as rotas protegidas.
 
-Dados Locais
+### Controllers
 
-alertas.json & usuarios.json: Arquivos que armazenam dados de alertas e usuários localmente, permitindo operações offline e rápidas.
+- **usuarioController.js:** Administra todas as operações relacionadas aos usuários, desde o registro até a exclusão.
+- **climaController.js:** Processa e fornece dados climáticos, essenciais para várias funcionalidades do projeto.
+- **alertaController.js:** Gerencia alertas, permitindo notificações eficientes e em tempo real.
 
+### Serviços
 
-Funcionalidades
-Rotas Disponíveis
+- **supabaseClient.js:** Serve como a ponte entre a aplicação e o Supabase, facilitando operações de banco de dados com segurança e rapidez.
 
-Usuários:
-Obtenha e gerencie informações de usuários com endpoints RESTful.
+### Dados Locais
 
+- **alertas.json & usuarios.json:** Arquivos que armazenam dados de alertas e usuários localmente, permitindo operações offline e rápidas.
 
+---
 
+## Funcionalidades
 
-Clima:
-Acesse dados climáticos atualizados, essenciais para apps de previsão do tempo.
+### Rotas Disponíveis
 
+- **Usuários:**
+  - Obtenha e gerencie informações de usuários com endpoints RESTful.
 
+- **Clima:**
+  - Acesse dados climáticos atualizados, essenciais para apps de previsão do tempo.
 
+- **Alertas:**
+  - Crie e gerencie alertas personalizados para manter os usuários informados.
 
-Alertas:
-Crie e gerencie alertas personalizados para manter os usuários informados.
+### Segurança
 
+- Autenticação robusta via middleware, utilizando tokens JWT para proteger dados sensíveis.
 
+---
 
-Segurança
+## Desenvolvimento e Contribuição
 
-Autenticação robusta via middleware, utilizando tokens JWT para proteger dados sensíveis.
+### Como Contribuir
 
+- **Fork e Pull Requests:** Incentivamos a colaboração através de forks e pull requests, garantindo que cada contribuição seja revisada e integrada de forma eficaz.
 
-Desenvolvimento e Contribuição
-Como Contribuir
+### Diretrizes
 
-Fork e Pull Requests: Incentivamos a colaboração através de forks e pull requests, garantindo que cada contribuição seja revisada e integrada de forma eficaz.
+- Mantenha o código limpo e bem documentado.
+- Siga as melhores práticas de desenvolvimento para garantir a escalabilidade e manutenção do projeto.
 
-Diretrizes
+---
 
-Mantenha o código limpo e bem documentado.
-Siga as melhores práticas de desenvolvimento para garantir a escalabilidade e manutenção do projeto.
+## Licenciamento e Suporte
 
-Diagramas C4
-Visão Geral do Sistema
+### Licença
 
-<img width="3250" height="3840" alt="diag" src="https://github.com/user-attachments/assets/e609c3aa-0558-44cd-8e7a-334c0e025893" />
+- Este projeto é licenciado sob a **MIT License**, permitindo ampla liberdade de uso e modificação.
+
+---
+
+## Diagramas C4
+
+### Visão Geral do Sistema
+
+<img width="3250" height="3840" alt="diag" src="https://github.com/user-attachments/assets/c0520353-9176-479a-a07e-1ae8183eaef5" />
+
 
 Este diagrama ilustra a interação básica entre o usuário, a API back-end desenvolvida em Node.js com Express, e o Supabase para autenticação e gestão de dados.
 
-<img width="3516" height="3840" alt="diag Container" src="https://github.com/user-attachments/assets/18fc9d00-b26e-4b81-be5c-bcd8ab1cc188" />
+### Detalhamento da API
+
+<img width="3516" height="3840" alt="diag Container" src="https://github.com/user-attachments/assets/521e55f5-f112-402b-af64-493cadb10295" />
+
 
 Este diagrama detalha como o usuário interage com a API Express. Mostra a entrada principal no server.js, o uso de middleware para autenticação, e como os controladores processam as requisições, interagindo tanto com armazenamento local quanto com serviços externos.
 
-Fluxo de Dados
-<img width="3840" height="3804" alt="diag componentes" src="https://github.com/user-attachments/assets/e8bdbfea-6930-484b-bdd4-b5ac4e2772c4" />
+### Fluxo de Dados
+
+<img width="3840" height="3804" alt="diag componentes" src="https://github.com/user-attachments/assets/d5fd9371-ebbc-4e73-855e-206b17416b59" />
 
 Este diagrama apresenta o fluxo de dados através da API Web, desde o usuário até o armazenamento externo no Supabase e local nos arquivos JSON. Destaca a importância da camada de autenticação e dos controladores na gestão de dados e serviços.
-
-Licenciamento e Suporte
-Licença
-
-Este projeto é licenciado sob a MIT License, permitindo ampla liberdade de uso e modificação.
