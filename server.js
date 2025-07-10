@@ -33,6 +33,15 @@ app.use('/clima',   auth, climaRoutes);
 // Rota raiz – redireciona para a página de clima
 app.get('/', (req, res) => res.redirect('/clima.html'));
 
+// server.js
+const swaggerUi = require('swagger-ui-express');
+const YAML      = require('yamljs');
+
+const openapiDocument = YAML.load(path.join(__dirname, 'docs/openapi.yaml'));
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapiDocument));
+
+
 // Porta dinâmica para Azure (ou 5000 em local)
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

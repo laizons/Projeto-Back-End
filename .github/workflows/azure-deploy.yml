@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: meu-app-node       # ← substitua pelo nome exato do seu Web App
+  AZURE_WEBAPP_NAME: sosalerta       # ← substitua pelo nome exato do seu Web App
   AZURE_WEBAPP_PACKAGE_PATH: '.'        # ← ou o caminho da pasta do seu app, se não for a raiz
   NODE_VERSION: '20.x'                  # ← confirme a versão utilizada
 
