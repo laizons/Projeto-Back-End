@@ -1,34 +1,40 @@
+// server.js
+
+// Carrega variáveis de ambiente de .env
+require('dotenv').config();
+
 const express = require('express');
-const cors = require('cors');
+const cors    = require('cors');
+const path    = require('path');
+
+// Middleware de autenticação JWT (se estiver usando)
+const auth          = require('./middlewares/auth');
+
+// Rotas
 const usuarioRoutes = require('./routes/usuarioRoutes');
-const alertaRoutes = require('./routes/alertaRoutes');
-const climaRoutes = require('./routes/climaRoutes');
+const alertaRoutes  = require('./routes/alertaRoutes');
+const climaRoutes   = require('./routes/climaRoutes');
 
 const app = express();
+
+// Middlewares globais
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
+// Rotas públicas (registro/login)
 app.use('/usuarios', usuarioRoutes);
-app.use('/alertas', alertaRoutes);
-app.use('/clima', climaRoutes);
 
-const fs = require('fs-extra');
-const path = require('path');
-const alertasPath = path.join(__dirname, 'data/alertas.json');
+// Rotas protegidas (exigem token válido)
+app.use('/alertas', auth, alertaRoutes);
+app.use('/clima',   auth, climaRoutes);
 
-app.get('/', async (req, res) => {
-  const alertas = await fs.readJson(alertasPath).catch(() => []);
-  if (alertas.length === 0) return res.send('🚨 Nenhum alerta ativo no momento.');
+// Rota raiz – redireciona para a página de clima
+app.get('/', (req, res) => res.redirect('/clima.html'));
 
-  let resposta = '<h2>🚨 ALERTAS ATIVOS</h2><ul>';
-  alertas.forEach(a => {
-    resposta += `<li><strong>[${a.categoria}]</strong> ${a.titulo} — ${a.descricao} (${a.local})</li>`;
-  });
-  resposta += '</ul>';
-  res.send(resposta);
+// Porta dinâmica para Azure (ou 5000 em local)
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
-
-app.listen(5000, () => {
-  console.log('Servidor rodando na porta 5000');
-});
-

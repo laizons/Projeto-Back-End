@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Clima Local</title>
+  <style>
+    body { font-family: sans-serif; max-width: 400px; margin: 2rem auto; }
+    #loading { color: #555; }
+    #error   { color: red; }
+    #resultado { display: none; }
+    .alerta { border: 1px solid #ccc; padding: 0.5rem; margin: 0.5rem 0; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Previsão do Tempo</h1>
+  <p id="loading">Obtendo sua localização…</p>
+  <p id="error"></p>
+  <div id="resultado">
+    <!-- Cidade exibida acima da temperatura -->
+    <p>📍 <strong>Cidade:</strong> <span id="cidade"></span></p>
+    <p id="desc"></p>
+    <p>🌡️ <strong>Temperatura:</strong> <span id="temp"></span> °C</p>
+    <p>💧 <strong>Umidade:</strong> <span id="hum"></span>%</p>
+    <p>💨 <strong>Vento:</strong> <span id="wind"></span> km/h</p>
+    <p id="chuva"></p>
+    <h3>Alertas Gerados</h3>
+    <div id="alertas"></div>
+  </div>
+
+  <script>
+    const loading = document.getElementById('loading');
+    const errorEl = document.getElementById('error');
+    const resBox  = document.getElementById('resultado');
+    const cidadeEl  = document.getElementById('cidade');
+    const descEl    = document.getElementById('desc');
+    const tempEl    = document.getElementById('temp');
+    const humEl     = document.getElementById('hum');
+    const windEl    = document.getElementById('wind');
+    const chuvaEl   = document.getElementById('chuva');
+    const alertasEl = document.getElementById('alertas');
+
+    (async () => {
+      const token = localStorage.getItem('sb_token');
+      if (!token) {
+        window.location.href = '/login.html';
+        return;
+      }
+
+      if (!navigator.geolocation) {
+        errorEl.textContent = 'Geolocalização não suportada neste navegador.';
+        loading.style.display = 'none';
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(async pos => {
+        const { latitude: lat, longitude: lon } = pos.coords;
+        try {
+          const res = await fetch(`/clima?lat=${lat}&lon=${lon}`, {
+            headers: { 'Authorization': 'Bearer ' + token }
+          });
+          if (!res.ok) throw new Error('Falha ao buscar clima');
+          const data = await res.json();
+
+          // Exibe cidade acima
+          cidadeEl.textContent = data.cidade;
+          // Exibe descrição do tempo
+          descEl.textContent   = data.condicao;
+          // Exibe temperatura
+          tempEl.textContent   = Math.round(data.temperatura);
+          // Exibe umidade
+          humEl.textContent    = data.umidade;
+          // Converte vento (m/s) para km/h
+          const vKm = Math.round(data.vento * 3.6);
+          windEl.textContent   = vKm;
+
+          // Exibe se vai chover
+          const temChuva = data.detalhes.some(a => a.categoria === 'chuva');
+          chuvaEl.textContent  = temChuva ? '☔ Possível chuva prevista' : '⛅ Sem chuva prevista';
+
+          // Lista alertas
+          alertasEl.innerHTML = '';
+          if (data.detalhes.length === 0) {
+            alertasEl.textContent = 'Nenhum alerta no momento.';
+          } else {
+            data.detalhes.forEach(a => {
+              const div = document.createElement('div');
+              div.className = 'alerta';
+              div.innerHTML = `<strong>${a.titulo}</strong><p>${a.descricao}</p>`;
+              alertasEl.appendChild(div);
+            });
+          }
+
+          loading.style.display = 'none';
+          resBox.style.display  = 'block';
+        } catch (err) {
+          loading.style.display = 'none';
+          errorEl.textContent = err.message;
+        }
+      }, () => {
+        loading.style.display = 'none';
+        errorEl.textContent = 'Não foi possível obter sua localização.';
+      });
+    })();
+  </script>
+</body>
+</html>

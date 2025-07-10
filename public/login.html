@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login</title>
+</head>
+<body>
+  <h1>Login</h1>
+  <form id="loginForm">
+    <label>
+      Email:<br/>
+      <input type="email" name="email" required />
+    </label><br/><br/>
+    <label>
+      Senha:<br/>
+      <input type="password" name="password" required />
+    </label><br/><br/>
+    <button type="submit">Entrar</button>
+  </form>
+  <p>Não tem conta? <a href="/register.html">Registre-se</a></p>
+
+  <script>
+    const form = document.getElementById('loginForm')
+    form.addEventListener('submit', async e => {
+      e.preventDefault()
+      const { email, password } = Object.fromEntries(new FormData(form))
+      try {
+        const res = await fetch('/usuarios/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        })
+        const { session, error } = await res.json()
+        if (!res.ok) throw new Error(error || 'Falha no login')
+        // guarda o token para usar depois
+        localStorage.setItem('sb_token', session.access_token)
+        // redireciona para exibir o clima
+        window.location.href = '/clima.html'
+      } catch (err) {
+        alert(err.message)
+      }
+    })
+  </script>
+</body>
+</html>
