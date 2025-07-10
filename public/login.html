@@ -2,44 +2,123 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login - SOS Clima</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #f0f4ff, #ffffff);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .card {
+      border: none;
+      border-radius: 1rem;
+      box-shadow: 0 0.5rem 1.2rem rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: scale(1.01);
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: #495057;
+    }
+
+    .btn-primary {
+      background-color: #0d6efd;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #0b5ed7;
+    }
+
+    .text-muted a {
+      color: #0d6efd;
+    }
+  </style>
 </head>
 <body>
-  <h1>Login</h1>
-  <form id="loginForm">
-    <label>
-      Email:<br/>
-      <input type="email" name="email" required />
-    </label><br/><br/>
-    <label>
-      Senha:<br/>
-      <input type="password" name="password" required />
-    </label><br/><br/>
-    <button type="submit">Entrar</button>
-  </form>
-  <p>Não tem conta? <a href="/register.html">Registre-se</a></p>
+  <div class="container px-3">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="card p-4">
+          <div class="card-body">
+            <h1 class="text-center fw-bold text-primary mb-2">🔐 SOS Clima</h1>
+            <p class="text-center text-muted mb-4">Acesse sua conta para monitorar o clima em tempo real</p>
 
+            <form id="loginForm">
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" id="email" required placeholder="voce@email.com" />
+              </div>
+
+              <div class="mb-3">
+                <label for="password" class="form-label">Senha</label>
+                <input type="password" class="form-control" name="password" id="password" required placeholder="••••••••" />
+              </div>
+
+              <div id="error" class="text-danger text-center mb-3"></div>
+
+              <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-primary py-2">Entrar</button>
+              </div>
+            </form>
+            <p class="text-center text-muted mt-4">
+              <small>
+                Ainda não possui uma conta?
+                <a href="/register.html" class="text-primary fw-semibold text-decoration-none ms-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16">
+                    <path d="M8 7a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    <path fill-rule="evenodd" d="M8 8a5 5 0 0 0-4.546 2.916.5.5 0 0 0 .832.554A4 4 0 0 1 8 9a4 4 0 0 1 3.714 2.47.5.5 0 1 0 .832-.554A5 5 0 0 0 8 8z"/>
+                    <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                  </svg>
+                  Criar conta
+                </a>
+              </small>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Script Login -->
   <script>
-    const form = document.getElementById('loginForm')
-    form.addEventListener('submit', async e => {
-      e.preventDefault()
-      const { email, password } = Object.fromEntries(new FormData(form))
+    const form = document.getElementById('loginForm');
+    const errorEl = document.getElementById('error');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorEl.textContent = ''; // limpa erros anteriores
+      const { email, password } = Object.fromEntries(new FormData(form));
       try {
         const res = await fetch('/usuarios/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
-        })
-        const { session, error } = await res.json()
-        if (!res.ok) throw new Error(error || 'Falha no login')
-        // guarda o token para usar depois
-        localStorage.setItem('sb_token', session.access_token)
-        // redireciona para exibir o clima
-        window.location.href = '/clima.html'
+        });
+
+        const { session, error } = await res.json();
+        if (!res.ok) throw new Error(error || 'Falha no login');
+
+        // Guarda o token e redireciona
+        localStorage.setItem('sb_token', session.access_token);
+        window.location.href = '/clima.html';
       } catch (err) {
-        alert(err.message)
+        errorEl.textContent = err.message;
       }
-    })
+    });
   </script>
 </body>
 </html>
